@@ -1,14 +1,29 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-// import Box from './components/001.vue'
-import Ball from './components/002.vue'
+import {routes} from './routes'
+// const routes_map = routes.map(route => ({
+//   ...route,
+//   name: route
+// }));
+
 </script>
 
 <template>
-  <Ball />
+  <div id="demonstrate">
+    <ol>
+      <li v-for="item in routes">
+        <router-link :to="item.path">{{item.name}}</router-link>
+      </li>
+    </ol>
+    <router-view></router-view>
+  </div>
 </template>
 
 <style>
-
+/* #demonstrate {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}  */
 </style>

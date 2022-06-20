@@ -1,4 +1,5 @@
 <template>
+  <div>click</div>
   <canvas
     ref="canvas"
     @click="events.click"
@@ -56,6 +57,8 @@ function init(width: number, height: number) {
   Runner.run(runner, engine);
 }
 function add_box_click(e: MouseEvent) {
+  console.log("ok")
+  console.log("engine", engine)
   const box1 = Bodies.rectangle(e.x - box.width / 2, 0, box.width, box.height);
   World.add(engine!.world, box1);
 }
