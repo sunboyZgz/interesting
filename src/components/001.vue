@@ -1,6 +1,6 @@
 <template>
-  <div>click</div>
   <canvas
+    class="center"
     ref="canvas"
     @click="events.click"
     width="600"
@@ -57,12 +57,10 @@ function init(width: number, height: number) {
   Runner.run(runner, engine);
 }
 function add_box_click(e: MouseEvent) {
-  console.log("ok")
-  console.log("engine", engine)
-  const box1 = Bodies.rectangle(e.x - box.width / 2, 0, box.width, box.height);
+  const x = e.x - canvas.value?.offsetLeft! + canvas.value!.width / 2; // + canvas.value的原因是因为需要把transform之前的原位置计算出来
+  const box1 = Bodies.rectangle(x, 0, box.width, box.height);
   World.add(engine!.world, box1);
 }
-
 
 function add_events() {
   events.click = add_box_click
