@@ -1,18 +1,43 @@
 <script setup lang="ts">
+import Back from './components/back.vue'
+import { useRoute } from 'vue-router'
+const r = useRoute()
+console.log(r)
 </script>
 
 <template>
-    <div class="text-center mb-4">title</div>
-    <router-view></router-view>
-    <footer class="text-center mt-4">footer</footer>
+    <header v-if="r.path != '/'" class="text-center fix-o">{{r.name}}</header>
+    <Back v-if="r.path != '/'" class="fix-o back" />
+    <router-view class="center fix-o"></router-view>
+    <footer class="fix-o ">
+      <a class="text-xl" href="https://github.com/sunboyZgz" target="_blank">github</a>
+      <a class="text-4xl" >.</a>
+      <a class="text-xl" href="https://twitter.com/sunboy_zgz" target="_blank">twitter</a>
+      <div class="text-xl">from 2022/6/19</div>
+    </footer>
 </template>
 
 <style>
-.center {
+.fix-o {
   overflow: hidden;
   position: fixed;
+  transform: translate(-50%, -50%);
+}
+.center {
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+}
+.back {
+  left: 35%;
+  top: 10%;
+}
+header {
+  left: 50%;
+  top: 10%;
+}
+
+footer {
+  left: 50%;
+  bottom: 5%;
 }
 </style>

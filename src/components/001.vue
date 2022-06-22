@@ -1,6 +1,5 @@
 <template>
   <canvas
-    class="center"
     ref="canvas"
     @click="events.click"
     width="600"
@@ -12,6 +11,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Engine, Render, World, Bodies, Runner } from "matter-js";
+import Back from './back.vue'
 type Noop = typeof noop;
 interface Box {
   width: number;
@@ -57,6 +57,7 @@ function init(width: number, height: number) {
   Runner.run(runner, engine);
 }
 function add_box_click(e: MouseEvent) {
+  console.log(e.x)
   const x = e.x - canvas.value?.offsetLeft! + canvas.value!.width / 2; // + canvas.value的原因是因为需要把transform之前的原位置计算出来
   const box1 = Bodies.rectangle(x, 0, box.width, box.height);
   World.add(engine!.world, box1);

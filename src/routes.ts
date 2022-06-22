@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 13:26:09
- * @LastEditTime: 2022-06-21 11:03:13
+ * @LastEditTime: 2022-06-22 10:45:51
  */
 import {createRouter, createWebHistory} from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
@@ -21,7 +21,7 @@ const add_name = (route: MyRoute): MyRoute => ({
   ...route,
 })
 const add_id = (route: MyRoute, index: number): MyRoute => ({
-  id: (index).toString().padStart(3, '0') + route.name?.toString(),
+  id: (index).toString().padStart(3, '0'),
   ...route
 })
 export const filter_noid = (route: MyRoute): boolean => (!route.filter)

@@ -2,11 +2,10 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 08:33:53
- * @LastEditTime: 2022-06-21 11:40:18
+ * @LastEditTime: 2022-06-22 10:07:50
 -->
 <template>
 <canvas
-    class="center"
     ref="canvas"
     width="600"
     height="600"
