@@ -6,7 +6,7 @@ console.log(r)
 </script>
 
 <template>
-    <header v-if="r.path != '/'" class="text-center fix-o">{{r.name}}</header>
+    <header v-if="r.path != '/'" class="text-center fix-o text-2xl">{{r.name}}</header>
     <Back v-if="r.path != '/'" class="fix-o back" />
     <router-view class="center fix-o"></router-view>
     <footer class="fix-o ">

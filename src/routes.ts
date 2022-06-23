@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 13:26:09
- * @LastEditTime: 2022-06-22 10:45:51
+ * @LastEditTime: 2022-06-23 11:14:26
  */
 import {createRouter, createWebHistory} from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
@@ -10,6 +10,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const Index = () => import("./components/index.vue")
 const Box = () => import('./components/001.vue')
 const Ball = () => import('./components/002.vue')
+const Tree = () => import('./components/003.vue')
 
 type MyRoute = RouteRecordRaw & {
   id?: string,
@@ -29,6 +30,7 @@ const routes: MyRoute[] = [
   { path: '/', component: Index, filter: true },
   { path: '/box', component: Box },
   { path: '/ball', component: Ball },
+  { path: '/tree', component: Tree },
 ].map(add_name).map(add_id)
 console.log(routes)
 const router = createRouter({
