@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-23 11:14:08
- * @LastEditTime: 2022-06-23 16:14:58
+ * @LastEditTime: 2022-06-23 17:54:46
 -->
 <template>
   <canvas
@@ -49,6 +49,7 @@ function line_len(start: Point, end: Point) {
 }
 const pending_task: Function[] = []
 let num_branches = 0;
+
 function getRandomArbitrary(min:number, max:number) {
   return Math.random() * (max - min) + min;
 }
@@ -66,15 +67,23 @@ function draw_line_r(start: Point, end: Point, angle: Angle, counts: number) {
   }
   if (counts > 0) {
     const probability = 0.5;
+    const flower_prob = 0.8;
     const min_branches = 4;
+    const flower_branch = 3
     if (Math.random() < probability || num_branches < min_branches) {
       pending_task.push(() => {
+        if (Math.random() < flower_prob && num_branches > flower_branch) {
+          flower(getRandomArbitrary(3,4), l_end);
+        }
         draw_line(end, l_end); //draw left
         draw_line_r(end, l_end, {last: l_angle, degree: angle.degree}, counts - 1)
       })
     }
     if (Math.random() < probability || num_branches < min_branches) {
       pending_task.push(() => {
+        if (Math.random() < flower_prob && num_branches > flower_branch) {
+          flower(getRandomArbitrary(3,4), r_end);
+        }
         draw_line(end, r_end); //draw right
         draw_line_r(end, r_end, {last: r_angle, degree: angle.degree}, counts - 1)
       })
@@ -82,9 +91,11 @@ function draw_line_r(start: Point, end: Point, angle: Angle, counts: number) {
   } 
 }
 function draw_line(start: Point, end: Point) {
+  ctx.beginPath();
   ctx.moveTo(start.x, start.y);
   ctx.lineTo(end.x, end.y);
   ctx.stroke();
+  ctx.closePath();
 }
 let count = 0;
 function frame() {
@@ -110,11 +121,28 @@ function draw(start: Point, end: Point, angle: Angle) {
   execute();
   draw_line_r(start, end, angle, 8)
 }
+function flower(radian: number, center: Point) {
+  ctx.beginPath();
+  ctx.fillStyle = '#ffa0cc';
+  ctx.arc(center.x, center.y + radian * 1.5, radian * 1.5, 0, 2 * Math.PI)
+  ctx.arc(center.x, center.y - radian * 1.5, radian * 1.5, 0, 2 * Math.PI)
+  ctx.arc(center.x + radian * 1.5, center.y , radian * 1.5, 0, 2 * Math.PI)
+  ctx.arc(center.x - radian * 1.5, center.y , radian * 1.5, 0, 2 * Math.PI)
+  ctx.arc(center.x, center.y , radian * 1.5, 0, 2 * Math.PI)
+  ctx.fill();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.fillStyle = '#e9fd72';
+  ctx.arc(center.x, center.y, radian, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.closePath();
+}
 onMounted(() => {
   init();
   const start = {x: WIDTH / 2, y: HEIGHT};
   const end = {x: WIDTH / 2, y: HEIGHT - 80};
   const angle:Angle = {last: 0, degree: 20}
   draw(start, end, angle);
+  // flower(5, {x: WIDTH / 2, y: HEIGHT / 2});
 })
 </script>
