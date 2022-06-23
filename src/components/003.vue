@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-23 11:14:08
- * @LastEditTime: 2022-06-23 17:54:46
+ * @LastEditTime: 2022-06-23 19:24:14
 -->
 <template>
   <canvas
@@ -26,6 +26,7 @@ const canvas = $ref<HTMLCanvasElement>();
 let ctx:CanvasRenderingContext2D;
 let WIDTH: number;
 let HEIGHT: number;
+const noop = () => {}
 function init()  {
   ctx = canvas.getContext('2d')!;
   ctx.lineWidth = 1;
@@ -47,7 +48,8 @@ function line_len(start: Point, end: Point) {
   const y = end.y - start.y;
   return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
-const pending_task: Function[] = []
+const pending_task: [Function,Function][] = []
+const flower_task: Function[][] = []
 let num_branches = 0;
 
 function getRandomArbitrary(min:number, max:number) {
@@ -71,22 +73,23 @@ function draw_line_r(start: Point, end: Point, angle: Angle, counts: number) {
     const min_branches = 4;
     const flower_branch = 3
     if (Math.random() < probability || num_branches < min_branches) {
-      pending_task.push(() => {
-        if (Math.random() < flower_prob && num_branches > flower_branch) {
-          flower(getRandomArbitrary(3,4), l_end);
-        }
+      pending_task.push([
+      (Math.random() < flower_prob && num_branches > flower_branch) ? () => {flower(getRandomArbitrary(3,3.5), l_end);} : noop,
+      () => {
         draw_line(end, l_end); //draw left
         draw_line_r(end, l_end, {last: l_angle, degree: angle.degree}, counts - 1)
-      })
+      },
+      
+      ])
     }
     if (Math.random() < probability || num_branches < min_branches) {
-      pending_task.push(() => {
-        if (Math.random() < flower_prob && num_branches > flower_branch) {
-          flower(getRandomArbitrary(3,4), r_end);
-        }
-        draw_line(end, r_end); //draw right
+      pending_task.push([
+      (Math.random() < flower_prob && num_branches > flower_branch) ? () => {flower(getRandomArbitrary(3,3.5), r_end);} : noop,
+      () => {
+        draw_line(end, r_end);  //draw right
         draw_line_r(end, r_end, {last: r_angle, degree: angle.degree}, counts - 1)
-      })
+      },
+      ])
     }
   } 
 }
@@ -99,10 +102,29 @@ function draw_line(start: Point, end: Point) {
 }
 let count = 0;
 function frame() {
-  const tasks = [...pending_task];
+  num_branches += 1;
+  const tasks = pending_task.map(task => (task[1]));
+  flower_task.push(pending_task.map(task => (task[0])));
   pending_task.length = 0;
   tasks.forEach(fn => fn())
-  num_branches += 1;
+}
+let flower_counts = 0;
+function is_interger(num: number) {
+  return num == Math.floor(num)
+}
+function draw_flower() {
+  requestAnimationFrame(() => {
+    flower_counts += 1;
+    const index = flower_counts / 3;
+    if(flower_counts % 3 === 0) {
+      is_interger(index) && flower_task[index].forEach(fn => fn())
+    }
+    if(is_interger(index) && flower_task[index] && flower_task[index].length === 0) {
+    } else {
+      draw_flower()
+    }
+  })
+  
 }
 function execute() {
   requestAnimationFrame(() => {
@@ -110,8 +132,11 @@ function execute() {
     if (count % 3 == 0) {
       frame()
     }
-    if(count < 60 * 4) {
+    if(count < 60 * 2) {
       execute()
+    } else {
+      console.log(flower_task)
+      draw_flower()
     }
   })
   
@@ -143,6 +168,5 @@ onMounted(() => {
   const end = {x: WIDTH / 2, y: HEIGHT - 80};
   const angle:Angle = {last: 0, degree: 20}
   draw(start, end, angle);
-  // flower(5, {x: WIDTH / 2, y: HEIGHT / 2});
 })
 </script>
