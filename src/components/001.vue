@@ -11,7 +11,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Engine, Render, World, Bodies, Runner } from "matter-js";
-import Back from './back.vue'
 type Noop = typeof noop;
 interface Box {
   width: number;

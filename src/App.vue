@@ -6,10 +6,10 @@ console.log(r)
 </script>
 
 <template>
-    <header v-if="r.path != '/'" class="text-center fix-o text-2xl">{{r.name}}</header>
+    <header v-if="r.path != '/'" class="text-center fix-o text-2xl top-[5%]">{{r.name}}</header>
     <Back v-if="r.path != '/'" class="fix-o back" />
     <router-view class="center fix-o"></router-view>
-    <footer class="fix-o ">
+    <footer class="fix-o bottom-0 translate-x-[-50%]">
       <a class="text-xl" href="https://github.com/sunboyZgz" target="_blank">github</a>
       <a class="text-4xl" >.</a>
       <a class="text-xl" href="https://twitter.com/sunboy_zgz" target="_blank">twitter</a>
@@ -29,7 +29,7 @@ console.log(r)
 }
 .back {
   left: 35%;
-  top: 10%;
+  top: 5%;
 }
 header {
   left: 50%;
