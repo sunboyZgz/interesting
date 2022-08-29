@@ -15,4 +15,20 @@ completed:
 next:
 try to complete some different canvas exercises ;
 
+图片像素化风转换
 
+图片压缩
+
+webgl
+
+introduce for opengl：https://duriansoftware.com/joe/an-intro-to-modern-opengl.-table-of-contents
+
+what is webgl：https://www.rust-lang.org/zh-CN/learn
+
+webgl fundamental: https://webglfundamentals.org/
+
+GLSL: https://github.com/wshxbqq/GLSL-Card
+
+![image-20220826214406278](E:\open-source\interesting\assets\image-20220826214406278.png)
+
+![image-20220826214417229](E:\open-source\interesting\assets\image-20220826214417229.png)
