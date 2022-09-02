@@ -1,0 +1,1 @@
+import{d as a,i as n,j as t,c as r,o as c}from"./index.dae69a92.js";const p=a({__name:"005",setup(s){const o=n();return t(()=>{const e=o.value.getContext("webgl");e.clearColor(0,0,0,1),e.clear(e.COLOR_BUFFER_BIT)}),(e,l)=>(c(),r("canvas",{ref_key:"container",ref:o,class:"w-[600px] h-[400px]",style:{border:"1px black solid"}}," hello ",512))}});export{p as default};
