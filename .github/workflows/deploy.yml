@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install packages
-        run: npm Install
+        run: npm install
       - name: generate dist
         run: npm run build
       
