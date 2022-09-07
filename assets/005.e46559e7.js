@@ -1,4 +1,4 @@
-import{d as v,i as M,j as R,c as L,o as E}from"./index.5c386a71.js";const b=v({__name:"005",setup(F){const s=M();R(()=>{const e=s.value.getContext("webgl");e.clearColor(0,0,0,1),e.clear(e.COLOR_BUFFER_BIT);const t=m(e,`
+import{d as v,i as M,j as R,c as L,o as E}from"./index.26f9fda3.js";const b=v({__name:"005",setup(F){const s=M();R(()=>{const e=s.value.getContext("webgl");e.clearColor(0,0,0,1),e.clear(e.COLOR_BUFFER_BIT);const t=m(e,`
     attribute vec4 aVertexPosition;
 
     uniform mat4 uModelViewMatrix;

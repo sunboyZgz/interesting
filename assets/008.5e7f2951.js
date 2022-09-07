@@ -1,1 +1,0 @@
-import{D as o}from"./util.1e5f47b8.js";import{d as n,i as r,j as t,c as a,o as s}from"./index.5c386a71.js";const f=n({__name:"008",setup(c){const e=r();return t(()=>{new o(e.value)}),(l,p)=>(s(),a("div",{ref_key:"container",ref:e,class:"w-[600px] h-[600px]",style:{border:"1px black solid"}},null,512))}});export{f as default};
