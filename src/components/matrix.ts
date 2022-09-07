@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-05 08:59:17
- * @LastEditTime: 2022-09-07 10:03:51
+ * @LastEditTime: 2022-09-07 22:53:33
  */
 
 //矩阵转置
@@ -72,7 +72,7 @@ function rowMultiMatrix(vector: number[], m2: number[][]) {
 
   for (let i = 0; i < v_l; i++) {
     result[i] = m2[i].reduce(
-      (pre: number, cur: number) => pre + vector[i] * cur,
+      (pre: number, cur: number, index) => pre + vector[index] * cur,
       0
     );
   }

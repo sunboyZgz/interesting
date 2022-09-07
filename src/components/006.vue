@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { DrawContext, Vector2, Vector3 } from "./util";
+import { DrawContext, Vector2, Vector3 } from "./draw";
 const container = $ref<HTMLCanvasElement>();
 let ctx: DrawContext;
 onMounted(() => {

@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:47:00
- * @LastEditTime: 2022-09-05 08:58:30
+ * @LastEditTime: 2022-09-07 22:56:53
  */
 // import {ReactiveVariable} from 'vue'
 
@@ -63,7 +63,12 @@ class DrawContext {
     this.ctx.stroke();
     this.ctx.closePath();
   }
-
+  draw_vector_order(v1: VECTOR2[]) {
+    for (let i = 0; i < v1.length; i++) {
+      const next = (i + 1) % v1.length;
+      this.draw_line(v1[i], v1[next]);
+    }
+  }
   draw_x() {
     this.draw_line(Vector2(-this.width / 2, 0), Vector2(this.width / 2, 0));
   }
@@ -87,6 +92,9 @@ class DrawContext {
     this.draw_line(Vector2(-x, -y), Vector2(x, y));
   }
 
+  clear_ctx() {
+    this.ctx.clearRect(-this.width, -this.height, this.width * 2, this.height * 2);
+  }
   // draw_cuboid(...polygons: Polygon[]) {
   //   if (polygons.length != 2) {
   //     console.error("we only need 2 polygons");
@@ -129,7 +137,5 @@ function str_to_p(p: Placement, ctx: DrawContext): Point {
 function translate_origin_inner(p: Point, ctx: CanvasRenderingContext2D) {
   ctx.translate(p.x, p.y);
 }
-
-
 
 export { DrawContext, Vector2, Vector3 };
