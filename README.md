@@ -14,6 +14,7 @@ completed:
 
 next:
 try to complete some different canvas exercises ;
+图片效果：shear
 
 图片像素化风转换
 
@@ -32,3 +33,7 @@ GLSL: https://github.com/wshxbqq/GLSL-Card
 ![image-20220826214406278](E:\open-source\interesting\assets\image-20220826214406278.png)
 
 ![image-20220826214417229](E:\open-source\interesting\assets\image-20220826214417229.png)
+
+Mit课程[Gibert Strange]：https://ocw.mit.edu/courses/18-085-computational-science-and-engineering-i-fall-2008/pages/study-materials/
+
+Gibert Strange[书籍]：https://math.mit.edu/~gs/linearalgebra/

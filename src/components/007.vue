@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-05 08:55:04
- * @LastEditTime: 2022-09-06 20:15:59
+ * @LastEditTime: 2022-09-07 10:14:44
 -->
 <script lang="ts" setup>
 import { matrix_transpose, matrix_multi } from "./matrix";
@@ -18,12 +18,15 @@ function transform() {
   transpose_result.value = matrix_transpose(transpose_result.value);
 }
 
-const matrix1 = [[1, 1, 1]];
+const matrix1 = [
+  [1, 3],
+  [5, 2],
+  [0, 4],
+];
 
 const matrix2 = [
-  [0.7, -0.7, 0],
-  [1.25, 1.25, 0],
-  [0, 0, 1],
+  [3, 6, 9, 4],
+  [2, 7, 8, 3],
 ];
 
 const mutil_result = ref<number[][]>();

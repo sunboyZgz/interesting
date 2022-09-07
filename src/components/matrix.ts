@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-05 08:59:17
- * @LastEditTime: 2022-09-06 19:55:02
+ * @LastEditTime: 2022-09-07 10:03:51
  */
 
 //矩阵转置
@@ -68,9 +68,10 @@ function rowMultiMatrix(vector: number[], m2: number[][]) {
     return;
   }
   const result = new Array(v_l);
-  const new_m2 = matrix_transpose(m2);
+  // const new_m2 = matrix_transpose(m2);
+
   for (let i = 0; i < v_l; i++) {
-    result[i] = new_m2[i].reduce(
+    result[i] = m2[i].reduce(
       (pre: number, cur: number) => pre + vector[i] * cur,
       0
     );

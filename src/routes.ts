@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 13:26:09
- * @LastEditTime: 2022-09-05 08:56:32
+ * @LastEditTime: 2022-09-07 09:44:01
  */
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
@@ -15,6 +15,7 @@ const Radar = () => import("./components/004.vue");
 const D3In2 = () => import("./components/006.vue");
 const WebGL = () => import("./components/005.vue");
 const Matrix = () => import("./components/007.vue");
+const LinearTranspose = () => import("./components/008.vue");
 
 export type MyRoute = RouteRecordRaw & {
   id?: string;
@@ -38,6 +39,7 @@ const routes: MyRoute[] = [
   { path: "/tree", component: Tree, meta: { title: "树枝" } },
   { path: "/radar", component: Radar, meta: { title: "雷达图" } },
   { path: "/matrix", component: Matrix, meta: { title: "矩阵数学" } },
+  { path: "/tlinear", component: LinearTranspose, meta: { title: "线性转换" } },
   {
     path: "/d3din2d",
     component: D3In2,
