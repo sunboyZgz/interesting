@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 09:41:56
- * @LastEditTime: 2022-09-07 22:57:49
+ * @LastEditTime: 2022-09-08 14:12:17
 -->
 <template>
   <div class="flex">
@@ -12,6 +12,9 @@
       <hr class="mt-4" />
       <button @click="onRotate">旋转</button>
       <input id="rotate_input" class="max-w-10" />
+      <hr class="mt-4" />
+      <button @click="onShear">剪切</button>
+      <input id="shear_input" class="max-w-10" />
     </div>
     <canvas
       ref="container"
@@ -23,15 +26,17 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
 import { DrawContext, Vector2, VECTOR2 } from "./draw";
-import { inputToInteger } from "./common";
-import { scale_vectors, rotate_vectors } from "./transform";
+import { inputToInteger, inputToShearFactor } from "./common";
+import { scale_vectors, rotate_vectors, shear_vectors } from "./transform";
+import { squareMatrix } from "./test";
 const container = ref<HTMLCanvasElement>();
-const vectors = [
-  Vector2(0, 4),
-  Vector2(2, 0),
-  Vector2(4, 2),
-  Vector2(2, 2),
-].map((item) => [item[0] * 30, item[1] * 30]);
+// const vectors = [
+//   Vector2(0, 4),
+//   Vector2(2, 0),
+//   Vector2(4, 2),
+//   Vector2(2, 2),
+// ].map((item) => [item[0] * 30, item[1] * 30]);
+const vectors = squareMatrix.map((item) => [item[0] * 60, item[1] * 60]);
 const result = ref(vectors);
 let d_context: DrawContext;
 onMounted(() => {
@@ -54,5 +59,12 @@ const onRotate = () => {
   const input = document.getElementById("rotate_input") as HTMLInputElement;
   const factor = inputToInteger(input);
   result.value = rotate_vectors(factor, result.value as VECTOR2[]);
+};
+
+const onShear = () => {
+  const input = document.getElementById("shear_input") as HTMLInputElement;
+  const factors = inputToShearFactor(input);
+  console.log(factors);
+  result.value = shear_vectors(factors, result.value as VECTOR2[]);
 };
 </script>
