@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 09:41:56
- * @LastEditTime: 2022-09-08 14:12:17
+ * @LastEditTime: 2022-09-08 16:23:40
 -->
 <template>
   <div class="flex">
@@ -15,6 +15,9 @@
       <hr class="mt-4" />
       <button @click="onShear">剪切</button>
       <input id="shear_input" class="max-w-10" />
+      <hr class="mt-4" />
+      <button @click="onMirror">镜像</button>
+      <input id="mirror_input" class="max-w-10" />
     </div>
     <canvas
       ref="container"
@@ -25,9 +28,18 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
-import { DrawContext, Vector2, VECTOR2 } from "./draw";
-import { inputToInteger, inputToShearFactor } from "./common";
-import { scale_vectors, rotate_vectors, shear_vectors } from "./transform";
+import { DrawContext, VECTOR2 } from "./draw";
+import {
+  inputToInteger,
+  inputToShearFactor,
+  inputToMirrorFactor,
+} from "./common";
+import {
+  scale_vectors,
+  rotate_vectors,
+  shear_vectors,
+  mirror_vectors,
+} from "./transform";
 import { squareMatrix } from "./test";
 const container = ref<HTMLCanvasElement>();
 // const vectors = [
@@ -64,7 +76,12 @@ const onRotate = () => {
 const onShear = () => {
   const input = document.getElementById("shear_input") as HTMLInputElement;
   const factors = inputToShearFactor(input);
-  console.log(factors);
   result.value = shear_vectors(factors, result.value as VECTOR2[]);
+};
+
+const onMirror = () => {
+  const input = document.getElementById("mirror_input") as HTMLInputElement;
+  const factor = inputToMirrorFactor(input);
+  result.value = mirror_vectors(factor, result.value as VECTOR2[]);
 };
 </script>

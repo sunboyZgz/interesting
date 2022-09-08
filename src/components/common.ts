@@ -2,9 +2,9 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 18:42:11
- * @LastEditTime: 2022-09-08 14:12:06
+ * @LastEditTime: 2022-09-08 14:44:39
  */
-import { ShearFactor } from "./transform";
+import { ShearFactor, MirrorFactor } from "./transform";
 
 function inputToInteger(input: HTMLInputElement): number {
   return parseFloat(input.value);
@@ -21,4 +21,14 @@ function inputToShearFactor(input: HTMLInputElement): ShearFactor {
   return factors.map((item) => parseFloat(item)) as ShearFactor;
 }
 
-export { inputToInteger, inputToShearFactor };
+function inputToMirrorFactor(input: HTMLInputElement): MirrorFactor {
+  //get mirror opposite the x or y axis
+  const value = input.value.trim();
+
+  return value == "x"
+    ? 1
+    : value == "y"
+    ? -1
+    : console.error("error input factor on mirror transform");
+}
+export { inputToInteger, inputToShearFactor, inputToMirrorFactor };

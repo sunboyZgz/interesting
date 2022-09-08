@@ -5,7 +5,7 @@ import { matrix_transpose, rowMultiMatrix } from "./matrix";
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 19:29:14
- * @LastEditTime: 2022-09-08 14:18:02
+ * @LastEditTime: 2022-09-08 14:48:12
  */
 function scale(factor: number, vector: VECTOR2) {
   let matrix: number[][];
@@ -73,6 +73,36 @@ function shearVectical(vertical: number, vector: VECTOR2) {
 function shear_vectors(factor: ShearFactor, vectors: VECTOR2[]) {
   return vectors.map((item) => shear(factor, item)) as number[][];
 }
+export type MirrorFactor = 1 | -1 | void;
+function mirror(factor: MirrorFactor, vector: VECTOR2) {
+  let matrix: number[][];
+  if (vector.length == 2) {
+    if (factor == 1) {
+      //x axis 得到镜像
+      matrix = matrix_transpose([
+        [1, 0],
+        [0, -1],
+      ]);
+    } else if (factor == -1) {
+      //y axis 得到镜像
+      matrix = matrix_transpose([
+        [-1, 0],
+        [0, 1],
+      ]);
+    } else {
+      matrix = [];
+      console.error("don't get a available factor");
+    }
+  } else {
+    matrix = [];
+    console.error("don't support matrix 3 x 3");
+  }
+  return rowMultiMatrix(vector, matrix);
+}
+
+function mirror_vectors(factor: MirrorFactor, vectors: VECTOR2[]) {
+  return vectors.map((item) => mirror(factor, item)) as number[][];
+}
 
 function degreeToRadian(degree: number): number {
   return (degree / 180) * Math.PI;
@@ -85,4 +115,6 @@ export {
   degreeToRadian,
   shear_vectors,
   shear,
+  mirror,
+  mirror_vectors,
 };
