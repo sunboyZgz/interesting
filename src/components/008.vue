@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 09:41:56
- * @LastEditTime: 2022-09-08 16:23:40
+ * @LastEditTime: 2022-09-09 08:05:14
 -->
 <template>
   <div class="flex">
@@ -18,6 +18,9 @@
       <hr class="mt-4" />
       <button @click="onMirror">镜像</button>
       <input id="mirror_input" class="max-w-10" />
+      <hr class="mt-4" />
+      <button @click="onTranslate">平移</button>
+      <input id="translate_input" class="max-w-10" />
     </div>
     <canvas
       ref="container"
@@ -27,11 +30,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, unref, watch } from "vue";
 import { DrawContext, VECTOR2 } from "./draw";
 import {
   inputToInteger,
-  inputToShearFactor,
+  inputToMutiFactor,
   inputToMirrorFactor,
 } from "./common";
 import {
@@ -39,6 +42,7 @@ import {
   rotate_vectors,
   shear_vectors,
   mirror_vectors,
+  affine_translate_vs,
 } from "./transform";
 import { squareMatrix } from "./test";
 const container = ref<HTMLCanvasElement>();
@@ -63,7 +67,7 @@ onMounted(() => {
 });
 const onScale = () => {
   const input = document.getElementById("scale_input") as HTMLInputElement;
-  const factor = inputToInteger(input);
+  const factor = inputToMutiFactor(input);
   result.value = scale_vectors(factor, result.value as VECTOR2[]);
 };
 
@@ -75,7 +79,7 @@ const onRotate = () => {
 
 const onShear = () => {
   const input = document.getElementById("shear_input") as HTMLInputElement;
-  const factors = inputToShearFactor(input);
+  const factors = inputToMutiFactor(input);
   result.value = shear_vectors(factors, result.value as VECTOR2[]);
 };
 
@@ -83,5 +87,11 @@ const onMirror = () => {
   const input = document.getElementById("mirror_input") as HTMLInputElement;
   const factor = inputToMirrorFactor(input);
   result.value = mirror_vectors(factor, result.value as VECTOR2[]);
+};
+
+const onTranslate = () => {
+  const input = document.getElementById("translate_input") as HTMLInputElement;
+  const factor = inputToMutiFactor(input);
+  result.value = affine_translate_vs(factor, result.value as VECTOR2[]);
 };
 </script>
