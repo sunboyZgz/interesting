@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 13:26:09
- * @LastEditTime: 2022-09-07 09:44:01
+ * @LastEditTime: 2022-09-10 11:59:07
  */
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
@@ -41,9 +41,9 @@ const routes: MyRoute[] = [
   { path: "/matrix", component: Matrix, meta: { title: "矩阵数学" } },
   { path: "/tlinear", component: LinearTranspose, meta: { title: "线性转换" } },
   {
-    path: "/d3din2d",
+    path: "/camera",
     component: D3In2,
-    meta: { title: "canvas绘制3d(低级版)" },
+    meta: { title: "相机空间" },
   },
   { path: "/gl_tutorial", component: WebGL },
 ]

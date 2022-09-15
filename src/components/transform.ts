@@ -5,7 +5,7 @@ import { matrix_multi, matrix_transpose, rowMultiMatrix } from "./matrix";
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 19:29:14
- * @LastEditTime: 2022-09-09 08:24:10
+ * @LastEditTime: 2022-09-15 10:11:30
  */
 function get2DScaleMatrix(factor: multiFactor) {
   return [
@@ -54,13 +54,13 @@ export type multiFactor = [horizon: number, vertical: number];
 function get2DShearHorizon(horizon: number) {
   return [
     [1, 0],
-    [Math.sin(degreeToRadian(horizon)), 1],
+    [Math.tan(degreeToRadian(horizon)), 1],
   ];
 }
 
 function get2DShearVectical(vertical: number) {
   return [
-    [1, Math.sin(degreeToRadian(vertical))],
+    [1, Math.tan(degreeToRadian(vertical))],
     [0, 1],
   ];
 }
