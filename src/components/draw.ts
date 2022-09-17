@@ -2,10 +2,10 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:47:00
- * @LastEditTime: 2022-09-07 22:56:53
+ * @LastEditTime: 2022-09-15 18:32:15
  */
 // import {ReactiveVariable} from 'vue'
-
+import { degreeToRadian } from "./transform";
 type Placement = "center" | "left"; //such right top bottom....
 
 type Point = {
@@ -35,6 +35,11 @@ class DrawContext {
     this.width = width;
     this.height = height;
     this.degree_y = 0;
+  }
+  public mirror_coordinate(): void {
+    // const radian = degreeToRadian(degree);
+    this.el.style.transformOrigin = "center";
+    this.el.style.transform = `translate(-50%, -50%) scale(1,-1)`;
   }
 
   translate_origin(placement: Placement): void;
@@ -93,7 +98,12 @@ class DrawContext {
   }
 
   clear_ctx() {
-    this.ctx.clearRect(-this.width, -this.height, this.width * 2, this.height * 2);
+    this.ctx.clearRect(
+      -this.width,
+      -this.height,
+      this.width * 2,
+      this.height * 2
+    );
   }
   // draw_cuboid(...polygons: Polygon[]) {
   //   if (polygons.length != 2) {

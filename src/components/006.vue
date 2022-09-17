@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:22:24
- * @LastEditTime: 2022-09-03 22:16:46
+ * @LastEditTime: 2022-09-16 08:32:00
 -->
 <template>
   <canvas
@@ -16,28 +16,16 @@
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { DrawContext, Vector2, Vector3 } from "./draw";
+import { DrawContext } from "./draw";
+import { Vector3 } from "./new_transform";
 const container = $ref<HTMLCanvasElement>();
-let ctx: DrawContext;
+const camera_pos = Vector3(0, 0, 0);
+//asume that the orthogonal axis of camera is aligned with x, y , z;
+
 onMounted(() => {
-  ctx = new DrawContext(container);
-  ctx.translate_origin("center");
-  ctx.draw_point(Vector2(0, 0));
-  ctx.draw_x();
-  ctx.draw_z();
-  ctx.draw_y(30); //now I can only resolve use a stupid method
-  const polygons = [
-    Vector3(1, -1, 1),
-    Vector3(1, 1, 1),
-    Vector3(-1, 1, 1),
-    Vector3(-1, -1, 1),
-  ];
-  const polygons1 = [
-    Vector3(1, -1, -1),
-    Vector3(1, 1, -1),
-    Vector3(-1, 1, -1),
-    Vector3(-1, -1, -1),
-  ];
-  
+  const d_context = new DrawContext(container);
+  d_context.mirror_coordinate();
+  d_context.draw_x();
+  d_context.draw_z();
 });
 </script>
