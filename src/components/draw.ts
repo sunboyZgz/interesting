@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:47:00
- * @LastEditTime: 2022-09-15 18:32:15
+ * @LastEditTime: 2022-09-17 22:50:00
  */
 // import {ReactiveVariable} from 'vue'
 import { degreeToRadian } from "./transform";
@@ -12,7 +12,7 @@ type Point = {
   x: number;
   y: number;
 };
-
+export type Pixel2D = [number, number];
 export type VECTOR2 = [number, number];
 
 type VECTOR3 = [number, number, number];
@@ -53,22 +53,22 @@ class DrawContext {
     }
   }
 
-  draw_point(v: VECTOR2) {
+  draw_point(v: Pixel2D, size = 1) {
     this.ctx.beginPath();
     this.ctx.fillStyle = "#000";
-    this.ctx.arc(v[0], v[1], 1, 0, 2 * Math.PI);
+    this.ctx.arc(v[0], v[1], size, 0, 2 * Math.PI);
     this.ctx.fill();
     this.ctx.closePath();
   }
 
-  draw_line(v1: VECTOR2, v2: VECTOR2) {
+  draw_line(v1: Pixel2D, v2: Pixel2D) {
     this.ctx.beginPath();
     this.ctx.moveTo(v1[0], v1[1]);
     this.ctx.lineTo(v2[0], v2[1]);
     this.ctx.stroke();
     this.ctx.closePath();
   }
-  draw_vector_order(v1: VECTOR2[]) {
+  draw_vector_order(v1: Pixel2D[]) {
     for (let i = 0; i < v1.length; i++) {
       const next = (i + 1) % v1.length;
       this.draw_line(v1[i], v1[next]);
