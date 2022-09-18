@@ -2,13 +2,13 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-17 23:00:40
+ * @LastEditTime: 2022-09-18 22:11:03
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
 import { matrix_transpose, rowMultiMatrix } from "./matrix";
 type Vector3 = [number, number, number, number];
-function Vector3(x: number, y: number, z: number, w = 1) {
+function Vector3(x: number, y: number, z: number, w = 0) {
   return [x, y, z, w] as Vector3;
 }
 type CameraCo = {
@@ -62,12 +62,15 @@ type Aspect = Vector3[];
 class Square implements Draw {
   aspects: Aspect[]; //can only pass 2 aspects
   d_ctx: DrawContext; //shouldn't be passed manually
+  origin_aspects: Aspect[];
   constructor(aspects: Aspect[], d_ctx: DrawContext) {
     this.aspects = aspects;
+    this.origin_aspects = aspects.map((aspect) =>
+      aspect.map((v) => v.slice())
+    ) as Aspect[];
     this.d_ctx = d_ctx;
   }
   public draw(): void {
-    // TODO
     const up_aspect = this.aspects[0].map((v) => throw_z(v));
     const bl_aspect = this.aspects[1].map((v) => throw_z(v));
     draw_aspect(up_aspect, this.d_ctx);
@@ -78,14 +81,16 @@ class Square implements Draw {
     const radian = degreeToRadian(degree);
     //the next matrix only rotate the vector by the y axis
     const matrix = matrix_transpose([
-      [Math.cos(radian), 1, Math.sin(radian), 0],
-      [1, 1, 1, 0],
-      [-Math.sin(radian), 1, Math.cos(radian), 0],
+      [Math.cos(radian), 0, Math.sin(radian), 0],
+      [0, 1, 0, 0],
+      [-Math.sin(radian), 0, Math.cos(radian), 0],
       [0, 0, 0, 1],
     ]);
-    const new_aspects = this.aspects.map((aspect) => {
+    console.log(this.origin_aspects.slice());
+    const new_aspects = this.origin_aspects.map((aspect) => {
       return aspect.map((v) => rowMultiMatrix(v, matrix) as Vector3);
     });
+    console.log(new_aspects);
     this.aspects = new_aspects;
     return;
   }

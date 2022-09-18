@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:47:00
- * @LastEditTime: 2022-09-17 22:50:00
+ * @LastEditTime: 2022-09-18 22:13:43
  */
 // import {ReactiveVariable} from 'vue'
 import { degreeToRadian } from "./transform";
@@ -39,7 +39,7 @@ class DrawContext {
   public mirror_coordinate(): void {
     // const radian = degreeToRadian(degree);
     this.el.style.transformOrigin = "center";
-    this.el.style.transform = `translate(-50%, -50%) scale(1,-1)`;
+    this.el.style.transform = `scale(1,-1)`;
   }
 
   translate_origin(placement: Placement): void;
