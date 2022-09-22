@@ -2,11 +2,12 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-18 22:11:03
+ * @LastEditTime: 2022-09-22 12:45:16
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
 import { matrix_transpose, rowMultiMatrix } from "./matrix";
+import { Arr_isEqual } from "./common";
 type Vector3 = [number, number, number, number];
 function Vector3(x: number, y: number, z: number, w = 0) {
   return [x, y, z, w] as Vector3;
@@ -63,12 +64,16 @@ class Square implements Draw {
   aspects: Aspect[]; //can only pass 2 aspects
   d_ctx: DrawContext; //shouldn't be passed manually
   origin_aspects: Aspect[];
+  axis: Vector3;
+  // rotate_degree: number;
   constructor(aspects: Aspect[], d_ctx: DrawContext) {
     this.aspects = aspects;
     this.origin_aspects = aspects.map((aspect) =>
       aspect.map((v) => v.slice())
     ) as Aspect[];
     this.d_ctx = d_ctx;
+    this.axis = Vector3(0, 1, 0);
+    // this.rotate_degree = 0;
   }
   public draw(): void {
     const up_aspect = this.aspects[0].map((v) => throw_z(v));
@@ -77,16 +82,50 @@ class Square implements Draw {
     draw_aspect(bl_aspect, this.d_ctx);
     connect_aspect(up_aspect, bl_aspect, this.d_ctx);
   }
-  public rotate(degree: number) {
+  public rotate(degree: number, v?: Vector3) {
     const radian = degreeToRadian(degree);
-    //the next matrix only rotate the vector by the y axis
+    //the default matrix only rotate the vector by the y axis
+    v = VectorToUnit(v || this.axis);
+    if (!Arr_isEqual(this.axis, v)) {
+      this.axis = v;
+      this.origin_aspects = this.aspects;
+      // this.rotate_degree
+      console.log("change");
+    }
+    const x = v[0],
+      y = v[1],
+      z = v[2];
+    console.log("x: ", v);
     const matrix = matrix_transpose([
-      [Math.cos(radian), 0, Math.sin(radian), 0],
-      [0, 1, 0, 0],
-      [-Math.sin(radian), 0, Math.cos(radian), 0],
+      [
+        x ** 2 * (1 - Math.cos(radian)) + Math.cos(radian),
+        x * y * (1 - Math.cos(radian)) + z * Math.sin(radian),
+        x * z * (1 - Math.cos(radian) - y * Math.sin(radian)),
+        0,
+      ],
+      [
+        x * y * (1 - Math.cos(radian)) - z * Math.sin(radian),
+        y ** 2 * (1 - Math.cos(radian)) + Math.cos(radian),
+        y * z * (1 - Math.cos(radian) + x * Math.sin(radian)),
+        0,
+      ],
+      [
+        x * z * (1 - Math.cos(radian)) + y * Math.sin(radian),
+        z * y * (1 - Math.cos(radian)) - x * Math.sin(radian),
+        z ** 2 * (1 - Math.cos(radian)) + Math.cos(radian),
+        0,
+      ],
       [0, 0, 0, 1],
     ]);
-    console.log(this.origin_aspects.slice());
+    // const matrix =
+    //   transpose ||
+    //   matrix_transpose([
+    //     [Math.cos(radian), 0, Math.sin(radian), 0],
+    //     [0, 1, 0, 0],
+    //     [-Math.sin(radian), 0, Math.cos(radian), 0],
+    //     [0, 0, 0, 1],
+    //   ]);
+    // console.log(matrix);
     const new_aspects = this.origin_aspects.map((aspect) => {
       return aspect.map((v) => rowMultiMatrix(v, matrix) as Vector3);
     });
@@ -127,5 +166,13 @@ function connect_aspect(
 //under general circumstances, we need a Class Aspects because of more flexiable expansion.
 function New_Aspect(...vs: Vector3[]) {
   return [...vs] as Aspect;
+}
+
+function VectorToUnit(v: Vector3) {
+  //vector3 to unit
+  const len = Math.sqrt(
+    v.reduce((total, coordinate) => total + coordinate ** 2, 0)
+  );
+  return v.map((v) => v / len) as Vector3;
 }
 export { Vector3, Square, OrthographicPrj, Camera, New_Aspect };
