@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-22 12:45:16
+ * @LastEditTime: 2022-09-23 21:39:18
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
@@ -37,27 +37,40 @@ class Camera {
 }
 interface Draw {
   draw(): void;
-  rotate(degree: number): void;
+  rotate(degree: number, v?: Vector3): void;
 }
 
 interface World {
   draw(): void;
-  rotate(): void;
+  rotate(degree: number, v?: Vector3): void;
 }
 
 class OrthographicPrj implements World {
-  public body?: Draw[];
-  constructor() {}
-  public Add_body() {} //later, the draw context is added to body instance when call add_body()
+  public bodys?: Draw[];
+  public axis: Vector3;
+  constructor() {
+    this.axis = Vector3(0, 1, 0);
+  }
+  public Add_body(body: Draw) {
+    this.bodys ? {} : (this.bodys = []);
+    this.bodys.push(body);
+  } //later, the draw context is added to body instance when call add_body()
   public draw() {
-    const bodys = this.body || [];
+    const bodys = this.bodys || [];
     if (bodys.length) {
       for (let i = 0; i < bodys.length; i++) {
         bodys[i].draw();
       }
     }
   }
-  public rotate(): void {}
+  public rotate(degree: number, v?: Vector3): void {
+    const bodys = this.bodys || [];
+    if (bodys.length) {
+      for (let i = 0; i < bodys.length; i++) {
+        bodys[i].rotate(degree, v || this.axis);
+      }
+    }
+  }
 }
 type Aspect = Vector3[];
 class Square implements Draw {
@@ -89,13 +102,10 @@ class Square implements Draw {
     if (!Arr_isEqual(this.axis, v)) {
       this.axis = v;
       this.origin_aspects = this.aspects;
-      // this.rotate_degree
-      console.log("change");
     }
     const x = v[0],
       y = v[1],
       z = v[2];
-    console.log("x: ", v);
     const matrix = matrix_transpose([
       [
         x ** 2 * (1 - Math.cos(radian)) + Math.cos(radian),
@@ -117,19 +127,9 @@ class Square implements Draw {
       ],
       [0, 0, 0, 1],
     ]);
-    // const matrix =
-    //   transpose ||
-    //   matrix_transpose([
-    //     [Math.cos(radian), 0, Math.sin(radian), 0],
-    //     [0, 1, 0, 0],
-    //     [-Math.sin(radian), 0, Math.cos(radian), 0],
-    //     [0, 0, 0, 1],
-    //   ]);
-    // console.log(matrix);
     const new_aspects = this.origin_aspects.map((aspect) => {
       return aspect.map((v) => rowMultiMatrix(v, matrix) as Vector3);
     });
-    console.log(new_aspects);
     this.aspects = new_aspects;
     return;
   }

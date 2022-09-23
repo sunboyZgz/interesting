@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-07 18:42:11
- * @LastEditTime: 2022-09-22 12:53:30
+ * @LastEditTime: 2022-09-22 16:34:29
  */
 import { multiFactor, MirrorFactor } from "./transform";
 import type { Vector3 } from "./new_transform";
@@ -37,14 +37,14 @@ function inputToVector3(input: HTMLInputElement) {
   const factors = value.split(",").slice();
   if (factors.length > 4) {
     console.error("can only put 4 factors");
-    return [undefined, undefined, undefined] as unknown as Vector3;
+    return;
   }
   const [x, y, z, w] = factors.map((item) => parseFloat(item));
   if (factors.length == 4 || factors.length == 3) {
     return V3(x, y, z, w) as Vector3;
   } else {
     console.error("miss too much factors");
-    return [undefined, undefined, undefined] as unknown as Vector3;
+    return;
   }
 }
 

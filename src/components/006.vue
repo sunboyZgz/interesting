@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:22:24
- * @LastEditTime: 2022-09-22 12:54:27
+ * @LastEditTime: 2022-09-23 21:35:35
 -->
 <template>
   <div class="flex">
@@ -22,34 +22,25 @@
 <script lang="ts" setup>
 import { onMounted, watch, ref } from "vue";
 import { DrawContext } from "./draw";
-import { Vector3, New_Aspect, Square } from "./new_transform";
+import { Vector3, New_Aspect, Square, OrthographicPrj } from "./new_transform";
 import type { Vector3 as V3 } from "./new_transform";
 import { inputToVector3, Arr_isEqual } from "./common";
-import { rotate } from "./transform";
+import { square_model, rectangle_mode } from "./model";
+
 const container = $ref<HTMLCanvasElement>();
 const camera_pos = Vector3(0, 0, 0);
 //asume that the orthogonal axis of camera is aligned with x, y , z;
-const up_aspect = New_Aspect(
-  Vector3(-100, 100, -100),
-  Vector3(-100, 100, 100),
-  Vector3(100, 100, 100),
-  Vector3(100, 100, -100)
-);
-const down_aspect = New_Aspect(
-  Vector3(-100, -100, -100),
-  Vector3(-100, -100, 100),
-  Vector3(100, -100, 100),
-  Vector3(100, -100, -100)
-);
 
 const degree = ref(0);
 let d_context: DrawContext;
 let square: Square;
+let rectangle: Square;
+let world: OrthographicPrj;
 let rotate_axis: V3 | undefined;
 watch([degree], () => {
   d_context.clear_ctx();
-  square.rotate(degree.value, rotate_axis);
-  square.draw();
+  world.rotate(degree.value, rotate_axis);
+  world.draw();
 });
 
 function AddDegree() {
@@ -66,21 +57,22 @@ function AddDegree() {
 function start() {
   let t1 = setInterval(() => {
     AddDegree();
-  }, 200);
+  }, 100);
   let t2 = setTimeout(() => {
     clearInterval(t1);
     clearTimeout(t2);
-  }, 10000);
+  }, 5000);
 }
 // let d_context;
 onMounted(() => {
   d_context = new DrawContext(container);
   d_context.translate_origin("center");
   d_context.mirror_coordinate();
-  // d_context.draw_x();
-  // d_context.draw_z();
-  square = new Square([up_aspect, down_aspect], d_context);
-  square.rotate(degree.value);
-  square.draw();
+  square = new Square(rectangle_mode, d_context);
+  rectangle = new Square(square_model, d_context);
+  world = new OrthographicPrj();
+  world.Add_body(square);
+  world.Add_body(rectangle);
+  world.draw();
 });
 </script>
