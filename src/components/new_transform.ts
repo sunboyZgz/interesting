@@ -2,11 +2,11 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-23 21:39:18
+ * @LastEditTime: 2022-09-24 21:22:22
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
-import { matrix_transpose, rowMultiMatrix } from "./matrix";
+import { matrix_transpose, rowMultiMatrix, getTranslateMatrix } from "./matrix";
 import { Arr_isEqual } from "./common";
 type Vector3 = [number, number, number, number];
 function Vector3(x: number, y: number, z: number, w = 0) {
@@ -38,6 +38,7 @@ class Camera {
 interface Draw {
   draw(): void;
   rotate(degree: number, v?: Vector3): void;
+  translate(v: Vector3): void;
 }
 
 interface World {
@@ -78,7 +79,8 @@ class Square implements Draw {
   d_ctx: DrawContext; //shouldn't be passed manually
   origin_aspects: Aspect[];
   axis: Vector3;
-  // rotate_degree: number;
+  start_angle: number;
+
   constructor(aspects: Aspect[], d_ctx: DrawContext) {
     this.aspects = aspects;
     this.origin_aspects = aspects.map((aspect) =>
@@ -86,7 +88,7 @@ class Square implements Draw {
     ) as Aspect[];
     this.d_ctx = d_ctx;
     this.axis = Vector3(0, 1, 0);
-    // this.rotate_degree = 0;
+    this.start_angle = 0;
   }
   public draw(): void {
     const up_aspect = this.aspects[0].map((v) => throw_z(v));
@@ -95,8 +97,9 @@ class Square implements Draw {
     draw_aspect(bl_aspect, this.d_ctx);
     connect_aspect(up_aspect, bl_aspect, this.d_ctx);
   }
+  //我认识旋转这块应该分成 世界旋转(视角旋转) 与 个体旋转
   public rotate(degree: number, v?: Vector3) {
-    const radian = degreeToRadian(degree);
+    const radian = degreeToRadian(degree - this.start_angle);
     //the default matrix only rotate the vector by the y axis
     v = VectorToUnit(v || this.axis);
     if (!Arr_isEqual(this.axis, v)) {
@@ -127,11 +130,31 @@ class Square implements Draw {
       ],
       [0, 0, 0, 1],
     ]);
+    const sub_x = (this.aspects[0][0][0] - this.aspects[0][2][0]) / 2;
+    const sub_y = (this.aspects[0][0][1] - this.aspects[1][0][1]) / 2;
+    const sub_z = (this.aspects[0][0][2] - this.aspects[0][1][2]) / 2;
+    const t_to_origin = getTranslateMatrix(Vector3(-sub_x, -sub_y, -sub_z, 1));
+    const origin_to_t = getTranslateMatrix(Vector3(sub_x, sub_y, sub_z, 1));
     const new_aspects = this.origin_aspects.map((aspect) => {
-      return aspect.map((v) => rowMultiMatrix(v, matrix) as Vector3);
+      return aspect.map(
+        (v) => compose(v, t_to_origin, matrix, origin_to_t) as Vector3
+      );
     });
     this.aspects = new_aspects;
     return;
+  }
+
+  public translate(v: Vector3): void {
+    const matrix = getTranslateMatrix(v);
+    const new_aspects = this.aspects.map((aspect) => {
+      return aspect.map((v) => {
+        v[3] = 1;
+        return rowMultiMatrix(v, matrix) as Vector3;
+      });
+    });
+    console.log(new_aspects);
+    this.origin_aspects = new_aspects;
+    this.aspects = new_aspects;
   }
 }
 function throw_z(v: Vector3) {
@@ -174,5 +197,11 @@ function VectorToUnit(v: Vector3) {
     v.reduce((total, coordinate) => total + coordinate ** 2, 0)
   );
   return v.map((v) => v / len) as Vector3;
+}
+
+function compose(v: Vector3, ...matrix: number[][][]) {
+  return matrix.reduce((pre, cur) => {
+    return rowMultiMatrix(pre, cur) as Vector3;
+  }, v);
 }
 export { Vector3, Square, OrthographicPrj, Camera, New_Aspect };

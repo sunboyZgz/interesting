@@ -2,8 +2,10 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-05 08:59:17
- * @LastEditTime: 2022-09-09 07:49:46
+ * @LastEditTime: 2022-09-24 21:13:09
  */
+
+import { Vector3 } from "./new_transform";
 
 //矩阵转置
 function matrix_transpose(matrix: number[][]) {
@@ -77,4 +79,24 @@ function rowMultiMatrix(vector: number[], m2: number[][]) {
   }
   return result;
 }
-export { matrix_transpose, matrix_multi, rowMultiMatrix };
+
+//生成平移矩阵
+function getTranslateMatrix(v: Vector3) {
+  if (v[3] == 0) {
+    console.error("we need a point for translate");
+    return [];
+  }
+  if (v[3] != 1) {
+    v.forEach((_, i) => {
+      v[i] /= v[3];
+    });
+  }
+  const matrix = [
+    [1, 0, 0, v[0]],
+    [0, 1, 0, v[1]],
+    [0, 0, 1, v[2]],
+    [0, 0, 0, 1],
+  ];
+  return matrix;
+}
+export { matrix_transpose, matrix_multi, rowMultiMatrix, getTranslateMatrix };
