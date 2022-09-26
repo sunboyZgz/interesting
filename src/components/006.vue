@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-08-29 16:22:24
- * @LastEditTime: 2022-09-24 21:27:44
+ * @LastEditTime: 2022-09-26 22:12:30
 -->
 <template>
   <div class="flex">
@@ -64,6 +64,7 @@ function AddDegree() {
     degree.value = 0;
   }
   rotate_axis = axis;
+
   degree.value += 1;
 }
 
@@ -93,7 +94,7 @@ onMounted(() => {
   d_context.mirror_coordinate();
   square = new Square(rectangle_mode, d_context);
   rectangle = new Square(square_model, d_context);
-  world = new OrthographicPrj();
+  world = new OrthographicPrj(1);
   world.Add_body(square);
   world.Add_body(rectangle);
   world.draw();

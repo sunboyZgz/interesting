@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-24 21:22:22
+ * @LastEditTime: 2022-09-26 22:12:12
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
@@ -18,6 +18,7 @@ type CameraCo = {
   gaze?: Vector3; //don't care now
   x?: Vector3; //don't care now
   world?: World;
+  aspect_rate?: number;
 };
 class Camera {
   //say that the camera is straightly face to the square and camera look at -z
@@ -27,16 +28,18 @@ class Camera {
   public gaze: Vector3;
   public x: Vector3;
   public world: World;
+  public aspect_rate: number;
   constructor(co: CameraCo) {
     this.origin = co.origin;
     this.up = co.up || Vector3(0, 1, 0);
     this.gaze = co.gaze || Vector3(0, 0, -1);
     this.x = co.x || Vector3(1, 0, 0);
-    this.world = co.world || new OrthographicPrj(); //later, we will set default view a Perspective Projection
+    this.aspect_rate = co.aspect_rate || 1;
+    this.world = co.world || new OrthographicPrj(this.aspect_rate); //later, we will set default view a Perspective Projection
   }
 }
 interface Draw {
-  draw(): void;
+  draw(aspect?: number): void;
   rotate(degree: number, v?: Vector3): void;
   translate(v: Vector3): void;
 }
@@ -46,11 +49,14 @@ interface World {
   rotate(degree: number, v?: Vector3): void;
 }
 
+//TODO: add aspects rate
 class OrthographicPrj implements World {
   public bodys?: Draw[];
   public axis: Vector3;
-  constructor() {
+  public aspect_rate: number;
+  constructor(aspect_rate: number) {
     this.axis = Vector3(0, 1, 0);
+    this.aspect_rate = aspect_rate;
   }
   public Add_body(body: Draw) {
     this.bodys ? {} : (this.bodys = []);
@@ -78,7 +84,7 @@ class Square implements Draw {
   aspects: Aspect[]; //can only pass 2 aspects
   d_ctx: DrawContext; //shouldn't be passed manually
   origin_aspects: Aspect[];
-  axis: Vector3;
+  public axis: Vector3;
   start_angle: number;
 
   constructor(aspects: Aspect[], d_ctx: DrawContext) {
@@ -90,7 +96,8 @@ class Square implements Draw {
     this.axis = Vector3(0, 1, 0);
     this.start_angle = 0;
   }
-  public draw(): void {
+  public draw(aspect?: number): void {
+    aspect = aspect || 1;
     const up_aspect = this.aspects[0].map((v) => throw_z(v));
     const bl_aspect = this.aspects[1].map((v) => throw_z(v));
     draw_aspect(up_aspect, this.d_ctx);
@@ -99,16 +106,18 @@ class Square implements Draw {
   }
   //我认识旋转这块应该分成 世界旋转(视角旋转) 与 个体旋转
   public rotate(degree: number, v?: Vector3) {
-    const radian = degreeToRadian(degree - this.start_angle);
     //the default matrix only rotate the vector by the y axis
     v = VectorToUnit(v || this.axis);
     if (!Arr_isEqual(this.axis, v)) {
-      this.axis = v;
+      this.axis = v; //轴换了，但是degree没有变动，导致轴与degree量不对等
+      this.start_angle = degree;
       this.origin_aspects = this.aspects;
     }
-    const x = v[0],
-      y = v[1],
-      z = v[2];
+    const radian = degreeToRadian(degree - this.start_angle);
+
+    const x = this.axis[0],
+      y = this.axis[1],
+      z = this.axis[2];
     const matrix = matrix_transpose([
       [
         x ** 2 * (1 - Math.cos(radian)) + Math.cos(radian),
