@@ -20,6 +20,9 @@ completed:
 
 - [x] 图片像素化：https://github.com/sunboyZgz/pixel-image
 
+- [x] 简单的线性变换与放射变换学习：Cameral World
+![正交世界1](E:\open-source\interesting\README\正交世界1.gif)
+
 
 
 next:
