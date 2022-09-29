@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-09-16 08:26:52
- * @LastEditTime: 2022-09-26 22:12:12
+ * @LastEditTime: 2022-09-29 19:43:08
  */
 import { DrawContext, Pixel2D } from "./draw";
 import { degreeToRadian } from "./transform";
@@ -12,6 +12,7 @@ type Vector3 = [number, number, number, number];
 function Vector3(x: number, y: number, z: number, w = 0) {
   return [x, y, z, w] as Vector3;
 }
+/*
 type CameraCo = {
   origin: Vector3;
   up?: Vector3; //don't care now
@@ -38,6 +39,7 @@ class Camera {
     this.world = co.world || new OrthographicPrj(this.aspect_rate); //later, we will set default view a Perspective Projection
   }
 }
+*/
 interface Draw {
   draw(aspect?: number): void;
   rotate(degree: number, v?: Vector3): void;
@@ -213,4 +215,10 @@ function compose(v: Vector3, ...matrix: number[][][]) {
     return rowMultiMatrix(pre, cur) as Vector3;
   }, v);
 }
-export { Vector3, Square, OrthographicPrj, Camera, New_Aspect };
+export {
+  Vector3,
+  Square,
+  OrthographicPrj,
+  // Camera,
+  New_Aspect,
+};
