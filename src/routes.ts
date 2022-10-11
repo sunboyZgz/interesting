@@ -2,7 +2,7 @@
  * @Author: sunboy
  * @LastEditors: sunboy
  * @Date: 2022-06-20 13:26:09
- * @LastEditTime: 2022-09-10 11:59:07
+ * @LastEditTime: 2022-10-11 21:41:41
  */
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
@@ -13,9 +13,10 @@ const Ball = () => import("./components/002.vue");
 const Tree = () => import("./components/003.vue");
 const Radar = () => import("./components/004.vue");
 const D3In2 = () => import("./components/006.vue");
-const WebGL = () => import("./components/005.vue");
+const WebGL = () => import("./components/005.vue"); //TODO
 const Matrix = () => import("./components/007.vue");
 const LinearTranspose = () => import("./components/008.vue");
+const Float = () => import("./components/009.vue");
 
 export type MyRoute = RouteRecordRaw & {
   id?: string;
@@ -44,6 +45,11 @@ const routes: MyRoute[] = [
     path: "/camera",
     component: D3In2,
     meta: { title: "相机空间" },
+  },
+  {
+    path: "/float",
+    component: Float,
+    meta: { title: "浮点数表示法" },
   },
   { path: "/gl_tutorial", component: WebGL },
 ]
